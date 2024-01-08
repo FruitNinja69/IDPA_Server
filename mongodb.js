@@ -104,6 +104,6 @@ app.put('/mitarbeiter/:id', (req, res) => {
     })
 })
 
-app.listen(3000, () => {
-  console.log('Server running on Port 3000')
+app.listen(8080, () => {
+  console.log('Server running on Port 8080')
 })
