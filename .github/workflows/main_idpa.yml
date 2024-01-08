@@ -60,5 +60,3 @@ jobs:
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_72B07CC0E2C246D99BB50855B58D4C15 }}
-      - name: 'Run mongodb.js on server'
-        run: node mongodb.js
