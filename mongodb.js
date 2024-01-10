@@ -14,7 +14,7 @@ const itemSchema = new mongoose.Schema({
   Geburtsdatum: Date,
 })
 
-const ToDo = mongoose.model('Mitarbeiter', itemSchema)
+const Mitarbeiter = mongoose.model('Mitarbeiter', itemSchema)
 
 mongoose.set('strictQuery', false)
 
@@ -27,7 +27,7 @@ mongoose
   })
 
 app.get('/mitarbeiter', (req, res) => {
-  ToDo.find({})
+  Mitarbeiter.find({})
     .then((data) => {
       res.json(data)
       console.log(data)
@@ -38,7 +38,7 @@ app.get('/mitarbeiter', (req, res) => {
 app.get('/mitarbeiter/:id', (req, res) => {
   const itemId = req.params.id
 
-  ToDo.findById(itemId)
+  Mitarbeiter.findById(itemId)
     .then((data) => {
       if (!data) {
         res.status(404).json({ error: 'Mitarbeiter not found' })
@@ -56,7 +56,7 @@ app.get('/mitarbeiter/:id', (req, res) => {
 app.delete('/mitarbeiter/:id', (req, res) => {
   const itemId = req.params.id
 
-  ToDo.findByIdAndDelete(itemId)
+  Mitarbeiter.findByIdAndDelete(itemId)
     .then((data) => {
       if (!data) {
         res.status(404).json({ error: 'Mitarbeiter not found' })
@@ -75,7 +75,7 @@ app.post('/mitarbeiter', async (req, res) => {
   try {
     const newMitarbieter = req.body
     console.log(req.body)
-    const createdMitarbeiter = await ToDo.create(newMitarbieter)
+    const createdMitarbeiter = await Mitarbeiter.create(newMitarbieter)
 
     res.status(201).json(createdMitarbeiter)
     console.log('Mitarbeiter created:', createdMitarbeiter)
@@ -87,12 +87,12 @@ app.post('/mitarbeiter', async (req, res) => {
 
 app.put('/mitarbeiter/:id', (req, res) => {
   const itemId = req.params.id
-  const updatedToDo = req.body
+  const updatedMitarbeiter = req.body
 
-  ToDo.findByIdAndUpdate(itemId, updatedToDo, { new: true })
+  Mitarbeiter.findByIdAndUpdate(itemId, updatedMitarbeiter, { new: true })
     .then((data) => {
       if (!data) {
-        res.status(404).json({ error: 'Todo not found' })
+        res.status(404).json({ error: 'Mitarbeiter not found' })
       } else {
         res.json(data)
         console.log('Mitarbeiter updated:', data)
