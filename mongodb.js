@@ -40,40 +40,47 @@ app.get('/mitarbeiter', (req, res) => {
 });
 
 app.get('/mitarbeiter/:id', (req, res) => {
-  const itemId = req.params.id
+  const itemId = req.params.id;
 
   Mitarbeiter.findById(itemId)
     .then((data) => {
       if (!data) {
-        res.status(404).json({ error: 'Mitarbeiter not found' })
+        res.status(404).json({ error: 'Mitarbeiter not found' });
       } else {
-        res.json(data)
-        console.log(data)
+        const mitarbeiterData = {
+          ...data._doc,
+          Geburtsdatum: data.Geburtsdatum.toISOString().split('T')[0],
+        };
+        res.json(mitarbeiterData);
       }
     })
     .catch((err) => {
-      console.log(err)
-      res.status(500).json({ error: 'Internal Server Error' })
-    })
-})
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
+});
 
 app.delete('/mitarbeiter/:id', (req, res) => {
-  const itemId = req.params.id
+  const itemId = req.params.id;
 
   Mitarbeiter.findByIdAndDelete(itemId)
     .then((data) => {
       if (!data) {
-        res.status(404).json({ error: 'Mitarbeiter not found' })
+        res.status(404).json({ error: 'Mitarbeiter not found' });
       } else {
-        res.json(data)
-        console.log(data)
+        const mitarbeiterData = {
+          ...data._doc,
+          Geburtsdatum: data.Geburtsdatum.toISOString().split('T')[0],
+        };
+        res.json(mitarbeiterData);
+        console.log('Mitarbeiter deleted:', mitarbeiterData);
       }
     })
     .catch((err) => {
-      console.log(err)
-      res.status(500).json({ error: 'Internal Server Error' })
-    })
-})
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
+});
 
 app.post('/mitarbeiter', async (req, res) => {
   try {
@@ -90,23 +97,29 @@ app.post('/mitarbeiter', async (req, res) => {
 })
 
 app.put('/mitarbeiter/:id', (req, res) => {
-  const itemId = req.params.id
-  const updatedMitarbeiter = req.body
+  const itemId = req.params.id;
+  const updatedMitarbeiter = req.body;
+
+  updatedMitarbeiter.Geburtsdatum = new Date(updatedMitarbeiter.Geburtsdatum).toISOString().split('T')[0];
 
   Mitarbeiter.findByIdAndUpdate(itemId, updatedMitarbeiter, { new: true })
     .then((data) => {
       if (!data) {
-        res.status(404).json({ error: 'Mitarbeiter not found' })
+        res.status(404).json({ error: 'Mitarbeiter not found' });
       } else {
-        res.json(data)
-        console.log('Mitarbeiter updated:', data)
+        const mitarbeiterData = {
+          ...data._doc,
+          Geburtsdatum: data.Geburtsdatum.toISOString().split('T')[0],
+        };
+        res.json(mitarbeiterData);
+        console.log('Mitarbeiter updated:', mitarbeiterData);
       }
     })
     .catch((err) => {
-      console.error(err)
-      res.status(500).json({ error: 'Internal Server Error' })
-    })
-})
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
+});
 
 app.listen(8080, () => {
   console.log('Server running on Port 8080')
