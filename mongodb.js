@@ -29,11 +29,15 @@ mongoose
 app.get('/mitarbeiter', (req, res) => {
   Mitarbeiter.find({})
     .then((data) => {
-      res.json(data)
-      console.log(data)
+      // Konvertieren Sie das Geburtsdatum im Ergebnis in das gewünschte Format
+      const mitarbeiterData = data.map((mitarbeiter) => ({
+        ...mitarbeiter._doc,
+        Geburtsdatum: mitarbeiter.Geburtsdatum.toISOString().split('T')[0],
+      }));
+      res.json(mitarbeiterData);
     })
-    .catch((err) => console.log(err))
-})
+    .catch((err) => console.log(err));
+});
 
 app.get('/mitarbeiter/:id', (req, res) => {
   const itemId = req.params.id
